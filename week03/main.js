@@ -1208,10 +1208,10 @@ function doArt() {
 	posVBO = gl.createBuffer();
 	indexVBO = gl.createBuffer();
 
-	drawModel(positions, indices, posLoc, colorLoc, [0, 0.8, 0]);
-	drawModel(transform(positionsWolke,2,4,0), indicesWolke, posLoc, colorLoc, [0.8, 0.8, 0.8]);
-	drawModel(transform(positionsWolke,-2,1,0,1.5), indicesWolke, posLoc, colorLoc, [0.8, 0.8, 0.8]);
-	drawModel(transform(positionsBaum,0,0,0,0.5), indicesBaum, posLoc, colorLoc, [0.8,0.5,0.2]);
+	drawModel(positions, indices, posLoc, [0, 0.8, 0]);
+	drawModel(transform(positionsWolke,2,4,0), indicesWolke, posLoc,  [0.8, 0.8, 0.8]);
+	drawModel(transform(positionsWolke,-2,1,0,1.5), indicesWolke, posLoc,  [0.8, 0.8, 0.8]);
+	drawModel(transform(positionsBaum,0,0,0,0.5), indicesBaum, posLoc, [0.8,0.5,0.2]);
 }
 
 function drawModel(pos, ind, posLoc, colr)
