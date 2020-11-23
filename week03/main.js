@@ -1167,7 +1167,7 @@ function initTriangle() {
 		157,147,161,
 	];
 
-	drawThings();
+	doArt();
 }
 
 function transform(posarr,x,y,z,scale=1)
@@ -1193,7 +1193,7 @@ function setColor(size, colr)
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 }
 
-function drawThings() {
+function doArt() {
 
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
