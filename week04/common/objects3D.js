@@ -1,10 +1,10 @@
 
 class Object3D {
 	// Get locations of shader variables
-	constructor(positions,indices,colors) {
-        this.positions = positions;
-        this.indices = indices;
-        this.colors = colors;
+	constructor(mesh) {
+        this.positions = mesh.positions;
+        this.indices = mesh.indices;
+        this.colors = mesh.colors;
 
 		this.posLoc = gl.getAttribLocation(program, "vPosition");
         this.colorLoc = gl.getAttribLocation(program, "vColor");

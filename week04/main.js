@@ -30,8 +30,8 @@ function main() {
 	program = initShaders(gl, "vertex-shader", "fragment-shader");
 	gl.useProgram(program);
 	
-	objects.push(new Object3D(River.positions, River.indices, River.colors));
-	objects.push(new Object3D(Island.positions, Island.indices, Island.colors));
+	objects.push(new Object3D(new River()));
+	objects.push(new Object3D(new Island()));
 
 	render();
 };

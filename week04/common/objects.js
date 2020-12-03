@@ -1,6 +1,6 @@
-var Island = {
+class Island {
     
-    positions : [
+    positions = [
         -0.344503,-0.106899,-2.313329,
         0.254658,0.065420,-2.430170,
         0.506020,-0.293147,-2.207084,
@@ -89,9 +89,9 @@ var Island = {
         -0.102879,0.422805,-0.489015,
         -0.269697,0.566033,-0.874217,
         -0.186512,0.743264,-1.152426
-    ],
+    ];
 
-    indices : [
+    indices = [
         0,1,2,
         3,4,2,
         5,6,4,
@@ -264,22 +264,20 @@ var Island = {
         53,78,55,
         43,57,55,
         74,81,75
-    ],
+    ];
 
-    colors : [
-
-    ],
+    colors = [];
     constructor() {
-        for(var i = 0; i < positions.length; i += 3) {
-            colors.push(0.5+(((i%2)*0.2)-0.2), 0.5+(((i%2)*0.2)-0.2), 0.5+(((i%2)*0.2)-0.2), 1);
+        for(var i = 0; i < this.positions.length; i += 3) {
+            this.colors.push(0.5+(((i%2)*0.2)-0.2), 0.5+(((i%2)*0.2)-0.2), 0.5+(((i%2)*0.2)-0.2), 1);
         }
     }
 }
 
-var River = {
+class River {
     
 
-    positions : [
+    positions = [
             0.0,  0.0, 14.0, 	 // index 0
             0.75, 0.0, 12.5, 	 // index 1
             1.25, 0.0, 12.5, 	 // index 2
@@ -299,9 +297,9 @@ var River = {
             4.0,  0.0,  0.0, 	 // index 16
             0.0, -7.0,  0.0, 	 // index 17 -> additional for waterfall
             4.0, -6.0,  0.0
-        ],
+        ];
 
-        indices : [
+        indices = [
             0, 1, 2,
 			1, 2, 3,
 			2, 3, 4,
@@ -319,15 +317,13 @@ var River = {
 			14, 15, 16,
 			15, 16, 17, // additional for waterfall
 			16, 17, 18  // additional for waterfall
-        ],
+        ];
 
-        colors : [
-
-        ],
+        colors = [];
 
         constructor() {
-            for(var i = 0; i < positions.length; i += 3) {
-                colors.push(0.2+(((i%2)*0.1)-0.1), 0.2+(((i%2)*0.1)-0.1), 0.8+(((i%2)*0.2)-0.2), 1);
+            for(var i = 0; i < this.positions.length; i += 3) {
+                this.colors.push(0.2+(((i%2)*0.1)-0.1), 0.2+(((i%2)*0.1)-0.1), 0.8+(((i%2)*0.2)-0.2), 1);
             }
         }  
 }
