@@ -3,15 +3,22 @@ let program;
 let objects = [];
 let posLoc,
 	colorLoc;
+let viewMatLoc;
 
-// TODO: 1.4 + 2.4: Führe globale Variablen ein für Werte, die in verschiedenen Funktionen benötigt werden
+modelMatrix = [];
 
+viewMatrix = [];
+
+const translationSpeed = 0.1;
+const rotationSpeed = 1;
 
 function main() {
 
 	// Get canvas and setup WebGL context
     const canvas = document.getElementById("gl-canvas");
 	gl = canvas.getContext('webgl2');
+
+	const body = document.getElementsByTagName("body")[0];
 
 	// Configure viewport
 	gl.viewport(0,0,canvas.width,canvas.height);
@@ -26,25 +33,36 @@ function main() {
 	// Get locations of shader variables
 	posLoc = gl.getAttribLocation(program, "vPosition");
 	colorLoc = gl.getAttribLocation(program, "vColor");
-	// TODO 1.3 + 2.3: Bestimme Locations der Shadervariablen für Model und View Matrix
 
+	viewMatLoc = gl.getUniformLocation(program, "viewMatrix");
+	
+	viewMatrix = mat4.create();
 
-	// TODO 2.5: Erstelle mithilfe der Funktionen aus gl-matrix.js eine initiale View Matrix
+	gl.uniformMatrix4fv(viewMatLoc, false, viewMatrix);
 
-
-	// TODO 2.6: Übergebe die initiale View Matrix an den Shader
-
-
-	// TODO 2.8: Füge einen Event Listener für Tastatureingaben hinzu
-
+	body.onkeydown = move;
 
 	// Create object instances
 	let island = new Island();
 	objects.push(island);
 
 	// TODO 1.5: Erstelle mehrere Baum-/Wolkeninstanzen und einen Fluss
-	// TODO 1.9: Rufe für jedes Objekt die Methode 'SetModelMatrix' auf und 
-	// positioniere das Objekt auf diese Weise auf der Insel
+
+	baum = new Baum();
+	baum.SetModelMatrix([-2,0,1],[0,0,0],[0.2,0.2,0.2]);
+	objects.push(baum);
+
+	baum = new Baum();
+	baum.SetModelMatrix([2,0,6],[0,0,0],[0.2,0.3,0.2]);
+	objects.push(baum);
+	
+	wolke = new Wolke();
+	wolke.SetModelMatrix([-1,2,0],[0,1,0],[3,1,1]);
+	objects.push(wolke);
+
+	wolke = new Wolke();
+	wolke.SetModelMatrix([1,2,0],[0,1,0],[1.5,1,0.5]);
+	objects.push(wolke);
 
 	render();
 };
@@ -62,11 +80,29 @@ function render() {
 	requestAnimationFrame(render);
 }
 
-// TODO 2.7: Erstelle einen Event-Handler, der anhand von WASD-Tastatureingaben
-// die View Matrix anpasst
-function move(e) 
+function move(key) 
 {
-	
+	if(key.code === 'KeyS') {
+		mat4.translate(viewMatrix,viewMatrix,[0,0,-translationSpeed]);		
+	} 
+	if(key.code === 'KeyD') {
+		mat4.translate(viewMatrix,viewMatrix,[-translationSpeed,0,0]);
+	} 
+	if(key.code === 'KeyW') {
+		mat4.translate(viewMatrix,viewMatrix,[0,0,translationSpeed]);
+	} 
+	if(key.code === 'KeyA') {
+		mat4.translate(viewMatrix,viewMatrix,[translationSpeed,0,0]);
+	} 
+
+	if(key.code === 'ArrowUp') {
+		mat4.translate(viewMatrix,viewMatrix,[0,-translationSpeed,0]);
+	} 
+	if(key.code === 'ArrowDown') {
+		mat4.translate(viewMatrix,viewMatrix,[0,translationSpeed,0]);
+	} 
+
+	gl.uniformMatrix4fv(viewMatLoc, false, viewMatrix);
 }
 
 main();
