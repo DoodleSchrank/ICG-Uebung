@@ -7,27 +7,16 @@
 		<script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
 
 			in vec4 vPosition;
-			in vec4 vNormal;
+			// TODO: Nimm Normalen als Attribut entgegen
 
 			uniform mat4 modelMatrix;
 			uniform mat4 viewMatrix;
 
-			uniform vec4 lightPos;
+			// TODO: Nimm die Position der Lichtquelle als Uniform-Variable entgegen
 			
 			// TODO: Nimm alle Koeffizienten und Intensitäten als Uniform-Variablen entgegen
-			uniform vec4 Ia;
-			uniform vec4 Id;
-			uniform vec4 Is;
-
-			uniform vec4 ka;
-			uniform vec4 kd;
-			uniform vec4 ks;
-
+			
 			// TODO: Definiere alle Konstanten c_1, c_2, c_3
-			const float c_1 = 0.1;
-			const float c_2 = 0.1;
-			const float c_3 = 0.1;
-
 
 			out vec4 vfColor;
 
@@ -40,37 +29,15 @@
 					0, 0, -1.0050251483917236, 0);
 
 				// TODO: Berechne die Normalenmatrix
-				mat4 normalMatrix = inverse(transpose(viewMatrix*modelMatrix));
 
 				// TODO: Rechne alle übergebenen Koordinaten (Lichtposition, Normalen) in das Kamerakoordinatensystem um
-				vec4 viewNormal =  normalMatrix*vec4(vNormal.xyz,0);
-				vec4 viewLightPos =  viewMatrix*lightPos;
-
-				vec4 tnorm = normalize(normalMatrix * vNormal);
-				vec4 camCoord = viewMatrix * modelMatrix * vPosition; 
-
-				vec4 s = normalize(lightPos - camCoord);
-
-				vfColor = Ia * ka + Id * kd * max(dot(s,tnorm),0.0);
-
+				
 				// TODO: Berechne und normalisiere die Vektoren L, N, R und V
-				/*vec4 L = normalize((viewMatrix*modelMatrix*vPosition)-viewLightPos);
-				vec4 N = normalize(viewNormal);
-				vec4 R = normalize(N+N-L);
-				vec4 V = normalize(viewMatrix*modelMatrix*vPosition);
-
-				vec4 L = normalize((viewMatrix*modelMatrix*vPosition)-viewLightPos);
-				vec4 N = normalize(viewNormal);
-				vec4 R = normalize(N+N-L);
-				vec4 V = normalize(viewMatrix*modelMatrix*vPosition);
 
 				// TODO: Berechne die Distanz d, sowie f_{att}
-				float d = distance(vPosition,lightPos);
-				float f_att = min(1./(c_1+c_2*d+c_3*d*d),1.);
 
 				// TODO: Berechne die Farbe vfColor anhand der Phong-Beleuchtungsgleichung
-				vfColor = Ia * ka + f_att * (Id * kd * max(0.,dot(N,L))+Is * ks * pow(max(0.,dot(R,V)),1.));*/
-
+				
 				gl_Position = projectionMatrix * viewMatrix * modelMatrix * vPosition;
 			}
 		</script>
