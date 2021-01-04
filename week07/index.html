@@ -38,38 +38,19 @@
 					0, 2.4142136573791504, 0, 0, 
 					0, 0, -1.0100502967834473, -1, 
 					0, 0, -1.0050251483917236, 0);
+				
+				mat4 normalMatrix = inverse(transpose(viewMatrix * modelMatrix));	
+				vec4 N = normalize (normalMatrix * vNormal);
 
-				// TODO: Berechne die Normalenmatrix
-				mat4 normalMatrix = inverse(transpose(viewMatrix*modelMatrix));
+				vec4 mv_vPosition = viewMatrix * modelMatrix * vPosition;
+				vec4 L = normalize(viewMatrix * modelMatrix * lightPos - mv_vPosition);
+				float d = distance(lightPos, vPosition);
 
-				// TODO: Rechne alle übergebenen Koordinaten (Lichtposition, Normalen) in das Kamerakoordinatensystem um
-				vec4 viewNormal =  normalMatrix*vec4(vNormal.xyz,0);
-				vec4 viewLightPos =  viewMatrix*lightPos;
+				float f_att = min(1./(c_1 + c_2 * d + c_3 * d * d ),1.);
 
-				vec4 tnorm = normalize(normalMatrix * vNormal);
-				vec4 camCoord = viewMatrix * modelMatrix * vPosition; 
+				vec4 H = normalize ((lightPos-vPosition) + (vec4(0.0)-mv_vPosition) );
 
-				vec4 s = normalize(lightPos - camCoord);
-
-				vfColor = Ia * ka + Id * kd * max(dot(s,tnorm),0.0);
-
-				// TODO: Berechne und normalisiere die Vektoren L, N, R und V
-				/*vec4 L = normalize((viewMatrix*modelMatrix*vPosition)-viewLightPos);
-				vec4 N = normalize(viewNormal);
-				vec4 R = normalize(N+N-L);
-				vec4 V = normalize(viewMatrix*modelMatrix*vPosition);
-
-				vec4 L = normalize((viewMatrix*modelMatrix*vPosition)-viewLightPos);
-				vec4 N = normalize(viewNormal);
-				vec4 R = normalize(N+N-L);
-				vec4 V = normalize(viewMatrix*modelMatrix*vPosition);
-
-				// TODO: Berechne die Distanz d, sowie f_{att}
-				float d = distance(vPosition,lightPos);
-				float f_att = min(1./(c_1+c_2*d+c_3*d*d),1.);
-
-				// TODO: Berechne die Farbe vfColor anhand der Phong-Beleuchtungsgleichung
-				vfColor = Ia * ka + f_att * (Id * kd * max(0.,dot(N,L))+Is * ks * pow(max(0.,dot(R,V)),1.));*/
+				vfColor = Ia * ka + f_att * (Id * kd * max(dot(L,N),0.0) + Is * ks * pow(max(0., dot(H, vNormal)), 2.));
 
 				gl_Position = projectionMatrix * viewMatrix * modelMatrix * vPosition;
 			}
