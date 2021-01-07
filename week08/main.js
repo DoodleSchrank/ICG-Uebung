@@ -5,6 +5,7 @@ let objects = [];
 
 let posLoc;
 
+
 // DONE: Deklariere benötigte Locations von Shadervariablen als globale Variablen 
 let normalLoc,
 	lightPositionLoc,
@@ -21,6 +22,9 @@ let modelMatrixLoc;
 let viewMatrixLoc,
 	viewMatrix;
 
+
+let projectionMatrixLoc;
+
 let eye,
 	target,
 	up;
@@ -31,6 +35,13 @@ let keyPressed = {
 	KeyS: false,
 	KeyD: false
 };
+
+let n,
+	r,
+	l,
+	t,
+	b,	
+	f;
 
 const speed = 0.005;
 
@@ -67,6 +78,8 @@ function main() {
 	ksLoc = gl.getUniformLocation(program, "ks");
 	specularExponentLoc = gl.getUniformLocation(program, "specExp");
 
+	projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
+
 	eye = vec3.fromValues(0.0, 0.3, 4.0);
 	target = vec3.fromValues(0.0, 0.3, 0.0);
 	up = vec3.fromValues(0.0, 1.0, 0.0);
@@ -82,9 +95,35 @@ function main() {
 	gl.uniform4fv(IdLoc, [0.8, 0.8, 0.8, 1.0]);
 	gl.uniform4fv(IsLoc, [0.7, 0.7, 0.7, 1.0]);
 
+	let projMat = [];
+	//mat4.ortho(projMat, -2, 2, -1, 1, 0, 5);
+	mat4.perspective(projMat, 1.0472, 2, 0.01, 5);
+
+	n = 10;
+	r = 2;
+	l = -2;
+	t = 1;
+	b = -1;	
+	f = 900;
+
+	/*projMat = [(2*n)/(r-l), 0, 0, 0, 
+				0, (2*n)/(t-b), 0, 0,
+				(r+l)/(r-l), (t+b)/(t-b), -(f+n)/(f-n), -1,
+				0, 0, -2*f*n/(f-n),0];*/
+
+	gl.uniformMatrix4fv(projectionMatrixLoc, false, projMat);
+	//updateProjection(); 
+
+	//document.getElementById("nSlider").oninput = function() {n = this.value; updateProjection();};
+	/*document.getElementById("fSlider").oninput = function() {f = this.value; updateProjection();};
+	document.getElementById("tSlider").oninput = function() {t = this.value; updateProjection();};
+	document.getElementById("bSlider").oninput = function() {b = this.value; updateProjection();};
+	document.getElementById("lSlider").oninput = function() {l = this.value; updateProjection();};
+	document.getElementById("rSlider").oninput = function() {r = this.value; updateProjection();};*/
+
 	document.addEventListener("keydown", keydown);
 	document.addEventListener("keyup", keyup);
-	document.addEventListener("mousemove", changeView);
+	canvas.addEventListener("mousemove", changeView);
 
 	canvas.onmousedown = function() {
         canvas.requestPointerLock();
@@ -132,6 +171,17 @@ function main() {
 
 	gameLoop();
 };
+
+function updateProjection()
+{
+	projMat = [(2*n)/(r-l), 0, (r+l)/(r-l), 0, 
+		0, (2*n)/(t-b), (t+b)/(t-b), 0,
+		0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
+		0, 0, -1, 0];
+	//mat4.perspective(projMat, 1.0472, 2, 0.01, 5)
+	gl.uniformMatrix4fv(projectionMatrixLoc, false, projMat);
+	console.log(n);
+}
 
 function update() 
 {
