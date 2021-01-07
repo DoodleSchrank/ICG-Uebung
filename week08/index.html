@@ -7,19 +7,53 @@
 		<script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
 
 			in vec4 vPosition;
-			in vec3 vNormal;
-
-			// TODO Nehme die Projektionsmatrix entgegen
+			in vec4 vNormal;
 
 			uniform mat4 modelMatrix;
 			uniform mat4 viewMatrix;
+			uniform mat4 projectionMatrix;
+
+			uniform vec4 lightPos;
+			
+			// TODO: Nimm alle Koeffizienten und Intensitäten als Uniform-Variablen entgegen
+			uniform vec4 Ia;
+			uniform vec4 Id;
+			uniform vec4 Is;
+
+			uniform vec4 ka;
+			uniform vec4 kd;
+			uniform vec4 ks;
+
+			// TODO: Definiere alle Konstanten c_1, c_2, c_3
+			const float c_1 = 0.1;
+			const float c_2 = 0.1;
+			const float c_3 = 0.1;
+
 
 			out vec4 vfColor;
 
 			void main()
 			{
-				// TODO bestimme mit der Projektionsmatrix die Vertexposition
-				gl_Position = viewMatrix * modelMatrix * vPosition;
+				const mat4 projectionMatrix = mat4(
+					1.2071068286895752, 0, 0, 0, 
+					0, 2.4142136573791504, 0, 0, 
+					0, 0, -1.0100502967834473, -1, 
+					0, 0, -1.0050251483917236, 0);
+				
+				mat4 normalMatrix = inverse(transpose(viewMatrix * modelMatrix));	
+				vec4 N = normalize (normalMatrix * vNormal);
+
+				vec4 mv_vPosition = viewMatrix * modelMatrix * vPosition;
+				vec4 L = normalize(viewMatrix * modelMatrix * lightPos - mv_vPosition);
+				float d = distance(lightPos, vPosition);
+
+				float f_att = min(1./(c_1 + c_2 * d + c_3 * d * d ),1.);
+
+				vec4 H = normalize ((lightPos-vPosition) + (vec4(0.0)-mv_vPosition) );
+
+				vfColor = Ia * ka + f_att * (Id * kd * max(dot(L,N),0.0) + Is * ks * pow(max(0., dot(H, vNormal)), 2.));
+
+				gl_Position = projectionMatrix * viewMatrix * modelMatrix * vPosition;
 			}
 		</script>
 		<script id="fragment-shader" type="x-shader/x-fragment">#version 300 es

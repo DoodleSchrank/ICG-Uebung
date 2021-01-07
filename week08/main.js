@@ -36,6 +36,7 @@ const speed = 0.005;
 
 
 function main() {
+
 	// Get canvas and setup WebGL context
     const canvas = document.getElementById("gl-canvas");
 	gl = canvas.getContext('webgl2');
@@ -54,9 +55,17 @@ function main() {
 	posLoc = gl.getAttribLocation(program, "vPosition");
 	modelMatrixLoc = gl.getUniformLocation(program, "modelMatrix");
 	viewMatrixLoc = gl.getUniformLocation(program, "viewMatrix");
-	normalLoc = gl.getAttribLocation(program, "vNormal");
 
-	// TODO bestimme die Uniform Position 
+	// DONE: Fülle globale Variablen mit Speicherlocations für Materialkoeffizienten und Lichtintensitäten
+	normalLoc = gl.getAttribLocation(program, "vNormal");
+	lightPositionLoc = gl.getUniformLocation(program, "lightPos");
+	IaLoc = gl.getUniformLocation(program, "Ia");
+	IdLoc = gl.getUniformLocation(program, "Id");
+	IsLoc = gl.getUniformLocation(program, "Is");
+	kaLoc = gl.getUniformLocation(program, "ka");
+	kdLoc = gl.getUniformLocation(program, "kd");
+	ksLoc = gl.getUniformLocation(program, "ks");
+	specularExponentLoc = gl.getUniformLocation(program, "specExp");
 
 	eye = vec3.fromValues(0.0, 0.3, 4.0);
 	target = vec3.fromValues(0.0, 0.3, 0.0);
@@ -67,9 +76,11 @@ function main() {
 
 	gl.uniformMatrix4fv(viewMatrixLoc, false, viewMatrix);
 
-	// TODO erstelle die Projektionsmatrix
-
-	// TODO übergebe die Projektionsmatrix an den Vertexshader
+	// DONE: Setze Position und Intensitäten der Lichtquelle als Uniform-Variablen
+	gl.uniform4fv(lightPositionLoc, [2.0, 3.0, 0.0, 1.0]);
+	gl.uniform4fv(IaLoc, [0.3, 0.3, 0.3, 1.0]);
+	gl.uniform4fv(IdLoc, [0.8, 0.8, 0.8, 1.0]);
+	gl.uniform4fv(IsLoc, [0.7, 0.7, 0.7, 1.0]);
 
 	document.addEventListener("keydown", keydown);
 	document.addEventListener("keyup", keyup);
