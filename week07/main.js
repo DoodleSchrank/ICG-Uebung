@@ -77,7 +77,7 @@ function main() {
 	gl.uniformMatrix4fv(viewMatrixLoc, false, viewMatrix);
 
 	// DONE: Setze Position und Intensitäten der Lichtquelle als Uniform-Variablen
-	gl.uniform4fv(lightPositionLoc, [2.0, 3.0, 0.0, 1.0]);
+	gl.uniform4fv(lightPositionLoc, [2.0, 1.0, 0.0, 1.0]);
 	gl.uniform4fv(IaLoc, [0.3, 0.3, 0.3, 1.0]);
 	gl.uniform4fv(IdLoc, [0.8, 0.8, 0.8, 1.0]);
 	gl.uniform4fv(IsLoc, [0.7, 0.7, 0.7, 1.0]);
