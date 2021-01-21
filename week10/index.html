@@ -21,15 +21,41 @@
 			in vec4 vfColor;
 			out vec4 fColor;
 
+			uniform vec2 viewPort;
+			uniform vec2 mousePos;
+
 			void main()
-			{
-				fColor = vfColor;
+			{	// Aufgabe 1
+				//fColor = vec4(1.,0.,0.,1.);
+				
+				// Aufgabe 2			
+				//fColor = vec4((vfColor.r + vfColor.g)/2.,(vfColor.r + vfColor.g)/2., (vfColor.r + vfColor.g)/2. ,1.);
+				
+				// Aufgabe 3
+				//fColor = vec4(vfColor.b, vfColor.b, vfColor.b, 1.);
+
+				// Aufgabe 4
+				//fColor = vfColor.brga;
+
+				// Aufgabe 5
+				//fColor = vec4(gl_FragCoord.x/viewPort.x, gl_FragCoord.y/viewPort.y, 0.,1.);
+				//fColor = vec4((vfColor.r + vfColor.g)/2.,vfColor.b,0.,1.);
+
+				// Aufgabe 6
+				//fColor = vec4(step(0.666,1.-(gl_FragCoord.x/viewPort.x)),0.,step(0.666,gl_FragCoord.y/viewPort.y),1.);
+
+				// Aufgabe 7
+				fColor = vec4(
+					step(viewPort.x-mousePos.x,viewPort.x-gl_FragCoord.x),
+					0.,
+					step(viewPort.y-mousePos.y,gl_FragCoord.y),
+					1.);
 			}
 		</script>
 		<script type="text/javascript" src="common/initShaders.js"></script>
 	</head>
 	<body>
-		<canvas id="gl-canvas" style="width:90vh; height:90vh;">
+		<canvas id="gl-canvas" width="500px" height="500px">
 			If you see this, your browser doesn't support WebGL.
 		</canvas>
 		

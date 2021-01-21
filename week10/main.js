@@ -4,20 +4,29 @@ let positions,
 	colors;
 let posVBO,
 	colorVBO;
+let canvas;
+let mouseX = 100,
+	mouseY = 100;
 
 function main() {
 
 	// 1. Get canvas and setup WebGL context
-    const canvas = document.getElementById("gl-canvas");
+    canvas = document.getElementById("gl-canvas");
 	gl = canvas.getContext('webgl2');
 
 	// 2. Configure viewport
-	gl.viewport(0,0,canvas.width,canvas.height);
+	gl.viewport(0,0,canvas.clientWidth,canvas.clientHeight);
 	gl.clearColor(1.0,1.0,1.0,1.0);
 
 	// 4. Init shader program via additional function and bind it
 	program = initShaders(gl, "vertex-shader", "fragment-shader");
 	gl.useProgram(program);
+
+	canvas.addEventListener("click", event=>{
+		mouseX = event.offsetX;
+		mouseY = event.offsetY;
+		renderTriangle();
+	});
 
 	initTriangle();
 	renderTriangle();
@@ -72,6 +81,13 @@ function renderTriangle() {
 	const colorLoc = gl.getAttribLocation(program, "vColor");
 	gl.enableVertexAttribArray(colorLoc);
 	gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
+
+	// Pass Uniforms
+	const viewPort = gl.getUniformLocation(program, "viewPort");
+	gl.uniform2f(viewPort,canvas.clientWidth,canvas.clientHeight);
+
+	const mousePos = gl.getUniformLocation(program, "mousePos");
+	gl.uniform2f(mousePos,mouseX,mouseY);
 
 	// 8. Render
 	gl.clear(gl.COLOR_BUFFER_BIT);
