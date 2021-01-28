@@ -11,11 +11,16 @@
 
 			in vec4 vPosition;
 			in vec4 vColor;
+			in vec2 vTexCoord;
+
 			out vec4 vfColor;
+			out vec2 vfTexCoord;
+			
 
 			void main()
 			{
 				vfColor = vColor;
+				vfTexCoord = vTexCoord;
 				gl_Position = vPosition;
 			}
 		</script>
@@ -29,11 +34,14 @@
 			// Texture-Map auszuwaehlen
 
 			in vec4 vfColor;
+			in vec2 vfTexCoord;
 			out vec4 fColor;
+
+			uniform sampler2D map;
 
 			void main()
 			{
-				fColor = vfColor;
+				fColor = texture(map, vfTexCoord);
 			}
 		</script>
 		<script type="text/javascript" src="common/gl-matrix.js"></script>
@@ -42,7 +50,8 @@
 		<script type="text/javascript" src="ImageCollection.js"></script>
 	</head>
 	<body>
-		<canvas width="512" height="512" id="gl-canvas">
+		<h1 style="font-family:Comic Sans MS">thicc cats</h1>
+		<canvas width="1536" height="512" id="gl-canvas">
 			If you see this, your browser doesn't support WebGL.
 		</canvas>
 		<script src="main.js" type="text/javascript"></script>

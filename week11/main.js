@@ -3,6 +3,7 @@ let program;
 let positions, colors;
 let posVBO,	colorVBO;
 let textureImage ;
+let texture;
 
 function main() {
 	// 1. Get canvas and setup WebGL context
@@ -10,7 +11,9 @@ function main() {
 	gl = canvas.getContext('webgl2');
 
 	textureImage = new Image();
-	textureImage.src = 'data:image/png;base64,' + ImageCollection.cougar ;
+	//textureImage.src = 'data:image/png;base64,' + ImageCollection.cougar ;
+	textureImage.src = 'data:image/jpeg;base64,' + ImageCollection.two_of_them ;
+
 	textureImage.addEventListener('load', function()
 	{
 			// TODO
@@ -18,6 +21,13 @@ function main() {
 			// Bild der Textur zuweisen
 			// Texture einbinden und konfigurieren
 			// siehe Folien 7 und 10-12
+			texture = gl.createTexture();
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureImage);
+			gl.generateMipmap(gl.TEXTURE_2D);
+			
+			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);		
 	} ) ;
 
 	// 2. Configure viewport
@@ -30,6 +40,8 @@ function main() {
 
 	// TODO:
 	// Setze den Uniformwert der Textur im Fragmentshader
+	samplerLoc = gl.getUniformLocation(program, "map");
+	gl.uniform1i(samplerLoc, texture);
 
 	initTriangle();
 	render () ;
@@ -56,6 +68,12 @@ function initTriangle() {
 	texCoords = [
 		// TODO
 		// Hier sollten die Texturkoordinaten stehen
+		0.15, 1.0,
+		0.15, 0.0,
+		0.85, 1.0,
+		0.85, 0.0,
+		0.15, 0.0,
+		0.85, 1.0
 	] ;
 
 	colors = [ 0, 1, 0, 1,
@@ -81,6 +99,10 @@ function initTriangleBuffers() {
 
 	// TODO Erstelle VBO fuer Texturkoordinaten analog
 	// zu den Positionen und Farben, siehe Folie 13
+	texVBO = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, texVBO);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
+
 }
 
 function renderTriangle() {
@@ -100,7 +122,11 @@ function renderTriangle() {
 	// TODO:
 	// Verlinke das Shaderattribut fuer die Texturkoordinaten
 	// analog zu den Farben / Positionn, siehe Folien 17/18
-
+	gl.bindBuffer(gl.ARRAY_BUFFER, texVBO);
+	const texCoordLoc = gl.getAttribLocation(program, "vTexCoord");
+	gl.enableVertexAttribArray(texCoordLoc);
+	gl.vertexAttribPointer(texCoordLoc, 2, gl.FLOAT, false, 0, 0);
+	
 	// 8. Render
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
