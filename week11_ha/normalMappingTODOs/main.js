@@ -18,6 +18,8 @@ let keyPressed = {
 	KeyD: false
 };
 
+let offset = 0;
+
 const speed = 0.005;
 
 
@@ -109,7 +111,7 @@ function main() {
 
 	document.addEventListener("keydown", keydown);
 	document.addEventListener("keyup", keyup);
-	document.addEventListener("mousemove", changeView);
+	canvas.addEventListener("mousemove", changeView);
 
 	canvas.onmousedown = function() {
 		canvas.requestPointerLock();
@@ -149,16 +151,24 @@ function update()
 		target[2] += look[0];
 	}
 	mat4.lookAt(viewMatrix, eye, target, up);
+
+	offset += 0.001; 
+
 	for(let object of objects) {
 		gl.useProgram(object.shader);
 		gl.uniformMatrix4fv(object.viewMatrixLoc, false, viewMatrix);
-	}
+		gl.uniform1f(object.offsetLoc, offset);
 }
+	}
 
-function render() {
 	
+	
+
+function render() {	
+
 	// Only clear once
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 
 	// Call render function of each scene object
 	for(let object of objects) {
