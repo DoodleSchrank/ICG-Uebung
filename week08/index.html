@@ -44,7 +44,7 @@
 				vec4 N = normalize (normalMatrix * vNormal);
 
 				vec4 mv_vPosition = viewMatrix * modelMatrix * vPosition;
-				vec4 L = normalize(viewMatrix * modelMatrix * lightPos - mv_vPosition);
+				vec4 L = normalize(viewMatrix * lightPos - mv_vPosition);
 				float d = distance(lightPos, vPosition);
 
 				float f_att = min(1./(c_1 + c_2 * d + c_3 * d * d ),1.);

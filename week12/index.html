@@ -79,7 +79,7 @@
 			uniform vec3 lightPosition;
 
 			// TODO 2.2: Füge Timer als uniforme Variable hinzu.
-
+			uniform int inTime;
 
 			out vec4 positionCam;
 			out vec4 normalCam;
@@ -87,20 +87,29 @@
 
 			out vec2 vfTexCoord;
 
+			float wave(in vec2 pos)
+			{
+				return 0.08 * sin(0.01 * float(inTime) + pos.x * pos.y) + 0.3;
+			}
+
 			void main()
 			{
 				// TODO 2.1: Berechne in y-Richtung verschobenen Vertex anhand von Sinus-/Cosinusfunktion.
-
+				float y = wave(vPosition.xz);
+				float yex = wave(vPosition.xz + vec2(0.1,0.));
+				float yez = wave(vPosition.xz + vec2(0.,0.1));
 
 				// TODO 2.5: Berechne neue Normale (Tipps werden in der Übung am 24.1. gegeben).
-
+				vec3 newPos = vPosition.xyz+vec3(0.,y,0.);
+				vec3 newNormal = -normalize(cross(vPosition.xyz + vec3(0.1,yex,0.) - newPos, 
+												vPosition.xyz + vec3(0.0,yez,0.1) - newPos));
 
 				mat4 modelViewMatrix = viewMatrix * modelMatrix;
 				mat4 normalMatrix = inverse(transpose(modelViewMatrix));
 
 				// TODO 2.6: Passe die folgenden zwei Zeilen so an, dass die !verschobene! Vertexposition und -normale in Kamerakoordinaten überführt werden.
-				positionCam = modelViewMatrix * vPosition;
-				normalCam = normalMatrix * vec4(vNormal, 0.0);
+				positionCam = modelViewMatrix * (vPosition+vec4(0.,y,0.,0.));
+				normalCam = normalMatrix * vec4(newNormal, 0.0);
 
 				lightPosCam = viewMatrix * vec4(lightPosition, 1.0);
 								
@@ -166,10 +175,10 @@
 		<script type="text/javascript" src="common/objects3D.js"></script>
 	</head>
 	<body>
-		<h1>Lorem Ipsum</h1>
+		<h1>Graphic Design is my Passion</h1>
 
 		<canvas id="gl-canvas" width="1024" height="512">
-			If you see this, your browser doesn't support WebGL.
+			
 		</canvas>
 		
 		<script src="main.js" type="text/javascript"></script>	

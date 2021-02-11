@@ -1877,7 +1877,8 @@ class Sea extends Object3D {
 		this.normalMapLoc = gl.getUniformLocation(this.shader, "normalMap");
 
 		// TODO 2.3: Hole Speicheradresse der Timer-Shadervariable.
-		
+		this.timerLoc = gl.getUniformLocation(this.shader, "inTime");
+
 		this.timer = 0;
 
 
@@ -1935,6 +1936,8 @@ class Sea extends Object3D {
 		gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
 	
 		// TODO 2.4: Zähle Timer hoch und übergebe aktuellen Wert an Shader. 
+		this.timer++;
+		gl.uniform1i(this.timerLoc, this.timer);
 
 	}
 }

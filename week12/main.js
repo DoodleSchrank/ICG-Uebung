@@ -109,7 +109,7 @@ function main() {
 
 	document.addEventListener("keydown", keydown);
 	document.addEventListener("keyup", keyup);
-	document.addEventListener("mousemove", changeView);
+	canvas.addEventListener("mousemove", changeView);
 
 	canvas.onmousedown = function() {
 		canvas.requestPointerLock();
